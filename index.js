@@ -12,6 +12,7 @@ let blocking = {
 let originals = {
   'analytics1': undefined,
   'analytics2': undefined,
+  'analytics3': undefined,
   'crash': undefined
 };
 
@@ -31,12 +32,16 @@ const enableAnalytics = () => {
 const disableAnalytics = () => {
   const analyticsMod1 = goosemodScope.webpackModules.findByProps('analyticsTrackingStoreMaker');
   const analyticsMod2 = goosemodScope.webpackModules.findByProps('getSuperPropertiesBase64');
+  const analyticsMod3 = goosemodScope.webpackModules.findByProps('getRegisterStatus');
 
   originals.analytics1 = analyticsMod1.AnalyticsActionHandlers.handleTrack;
   analyticsMod1.AnalyticsActionHandlers.handleTrack = () => {};
 
   originals.analytics2 = analyticsMod2.track;
   analyticsMod2.track = () => {};
+  
+  originals.analytics3 = analyticsMod3.getAnalyticsToken;
+  analyticsMod3.getAnalyticsToken = () => {};
 };
 
 const setCrash = (val) => {
@@ -63,10 +68,12 @@ const setSentry = (val) => {
 };
 
 const enableSentry = () => {
+  delete window.$;
   window.__SENTRY__.hub.getClient().getOptions().enabled = true;
 };
 
 const disableSentry = () => {
+  window.$ = true;
   window.__SENTRY__.hub.getClient().getOptions().enabled = false;
 };
 
