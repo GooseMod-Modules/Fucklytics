@@ -68,10 +68,12 @@ const setSentry = (val) => {
 };
 
 const enableSentry = () => {
+  delete window.$;
   window.__SENTRY__.hub.getClient().getOptions().enabled = true;
 };
 
 const disableSentry = () => {
+  window.$ = true;
   window.__SENTRY__.hub.getClient().getOptions().enabled = false;
 };
 
